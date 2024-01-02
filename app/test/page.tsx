@@ -4,6 +4,6 @@ type Props = {}
 
 export default function page({}: Props) {
   return (
-    <div>this is an unprotected page</div>
+    <div>this is should be unprotected</div>  
   )
 }
