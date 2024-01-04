@@ -2,27 +2,14 @@
 "use client"
 
 import React, { useState } from 'react'
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
+import Image from 'next/image';
 import * as z from "zod";
-import { Button } from "@/components/ui/button";
-import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
 import { ImageIcon, Pencil, PlusCircle } from 'lucide-react';
 import toast from 'react-hot-toast';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
-import { cn } from '@/lib/utils';
-import { Textarea } from '@/components/ui/textarea';
 import { Course } from '@prisma/client';
-import Image from 'next/image';
+import { Button } from "@/components/ui/button";
 import FileUpload from '@/components/fileUpload';
 
 
@@ -48,14 +35,6 @@ export default function ImageForm({initialData, courseId}: ImageFormProps) {
     const [isEditing, setIsEditing] = useState(false)
 
     const toggleEdit = () => setIsEditing((current) => !current)
-    const form = useForm<z.infer<typeof formSchema>>({
-        resolver: zodResolver(formSchema),
-        defaultValues: {
-            imageUrl: initialData?.imageUrl || ""
-        },
-      });
-
-    const { isSubmitting, isValid } = form.formState
 
     const onSubmit = async (values: z.infer<typeof formSchema>) => {
      try {
@@ -101,7 +80,7 @@ export default function ImageForm({initialData, courseId}: ImageFormProps) {
                    <Image
                         alt="upload"
                         fill
-                        className='object-cover rounded-md'
+                        className='object-contain rounded-md'
                         src={initialData.imageUrl}
                      />
                 </div>
