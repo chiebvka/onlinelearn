@@ -10,6 +10,7 @@ import ImageForm from './_components/imageForm';
 import CategoryForm from './_components/categoryForm';
 import PriceForm from './_components/priceForm';
 import AttachmentForm from './_components/attachmentForm';
+import ChaptersForm from './_components/chaptersForm';
 
 type Props = {}
 
@@ -22,9 +23,15 @@ export default async function page({params}: {params: {courseId: string}}) {
 
     const course = await db.course.findUnique({
         where: {
-            id: params.courseId
+            id: params.courseId,
+            userId
         },
         include: {
+            chapters:{
+                orderBy: {
+                    position: "asc"
+                }
+            },
             attachments: {
                 orderBy: {
                     createdAt: "desc"
@@ -50,7 +57,8 @@ export default async function page({params}: {params: {courseId: string}}) {
         course.description,
         course.imageUrl,
         course.price,
-        course.categoryId
+        course.categoryId,
+        course.chapters.some(chapter => chapter.isPublished)
     ]
 
     const totalFields = requiredFields.length;
@@ -107,9 +115,10 @@ export default async function page({params}: {params: {courseId: string}}) {
                         </h2>
                     </div>
                 </div>
-                <div>
-                    TODO: Course Chapters
-                </div>
+                <ChaptersForm
+                    initialData={course}
+                    courseId={course.id}
+                />
                 <div>
                     <div className="flex items-center gap-x-2">
                         <IconBadge icon={CircleDollarSign} />
