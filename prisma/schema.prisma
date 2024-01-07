@@ -6,6 +6,7 @@ datasource db {
 
 generator client {
   provider = "prisma-client-js"
+  previewFeatures = ["fullTextSearch", "fullTextIndex"]
 }
 
 
@@ -21,6 +22,7 @@ model Course {
 
   categoryId String?
   category Category? @relation(fields: [categoryId], references: [id])
+
   chapters Chapter[]
   attachments Attachment[]
   purchases Purchase[]
@@ -29,6 +31,7 @@ model Course {
   updatedAt DateTime @updatedAt
 
   @@index([categoryId])
+  @@fulltext([title])
 }
 
 model Category {
@@ -63,7 +66,6 @@ model Chapter {
 
   muxData MuxData?
 
-
   courseId String
   course Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
 
@@ -71,16 +73,17 @@ model Chapter {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
   @@index([courseId])
   
 }
 
 model MuxData {
   id String @id @default(uuid())
-  chapterId String @unique
   assetId String
   playbackId String?
 
+  chapterId String @unique
   chapter Chapter @relation(fields: [chapterId], references: [id], onDelete: Cascade)
 }
 

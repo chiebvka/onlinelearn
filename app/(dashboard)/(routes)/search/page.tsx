@@ -5,6 +5,8 @@ import { redirect } from "next/navigation";
 import { db } from "@/lib/db";
 import Categories from './_components/categories';
 import SearchInput from '@/components/searchInput';
+import { getCourses } from '@/actions/getCourses';
+import CoursesList from '@/components/coursesList';
 
 type Props = {}
 interface SearchPageProps {
@@ -28,10 +30,10 @@ export default async function SearchPage({searchParams}: SearchPageProps) {
     }
   });
 
-  // const courses = await getCourses({
-  //   userId,
-  //   ...searchParams,
-  // });
+  const courses = await getCourses({
+    userId,
+    ...searchParams,
+  });
 
   return (
     <>
@@ -42,7 +44,7 @@ export default async function SearchPage({searchParams}: SearchPageProps) {
       <Categories
         items={categories}
       />
-      {/* <CoursesList items={courses} /> */}
+      <CoursesList items={courses} />
     </div>
   </>
   )
